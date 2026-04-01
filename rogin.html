@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="design.css">
+</head>
+<body>
+  <h2>로그인</h2>
+
+  <form onsubmit="login(event)">
+    <input id="username" placeholder="아이디" required><br><br>
+    <input id="password" type="password" placeholder="비밀번호" required><br><br>
+
+    <button type="submit">로그인</button>
+  </form>
+
+  <script>
+    function login(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const usernameRegex = /^[a-zA-Z0-9]+$/;
+
+      if (!usernameRegex.test(username)) {
+        alert('아이디에는 영문과 숫자만 사용할 수 있습니다.');
+        return;
+      }
+
+      if (!password) {
+        alert('비밀번호를 입력해주세요.');
+        return;
+      }
+
+      fetch('/rogin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      })
+      .then(res => res.text().then(text => ({ ok: res.ok, text })))
+      .then(({ ok, text }) => {
+        if (ok && text === '로그인 성공') {
+          location.href = '/profil.html';
+        } else {
+          alert(text);
+        }
+      })
+      .catch(() => {
+        alert('요청 중 오류가 발생했습니다.');
+      });
+    }
+  </script>
+</body>
+</html>

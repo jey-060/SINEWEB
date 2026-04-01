@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+  <link rel="stylesheet" href="design.css">
+</head>
+<body>
+  <h2>프로필</h2>
+  <p id="user"></p>
+
+  <button onclick="logout()">로그아웃</button>
+
+  <script>
+    fetch('/profil')
+  .then(res => {
+    if (!res.ok) throw new Error();
+    return res.json();
+  })
+  .then(data => {
+    document.getElementById('user').innerText = data.username;
+  })
+  .catch(() => {
+    alert('로그인 필요');
+    location.href = 'insult.html';
+  });
+
+    function logout() {
+      fetch('/logout')
+        .then(() => location.href = 'start.html');
+    }
+  </script>
+</body>
+</html>
